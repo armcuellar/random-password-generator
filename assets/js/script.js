@@ -1,37 +1,66 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
+// list of possible characters to include in password
+var generateNumber = "0123456789";
+var generateUpperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+var generateLowerCase = "abcdefghijklmnopqrstuvwxyz";
+var generateSpecial = "!@#$%^&*()[]{}";
+
+
 function generatePassword() {
   // resets results when generating new password
+  var charactersIncluded = "";
   var results = "";
 
   // Calls password length function and return valid length number
   var validLength = passwordLength();
-  console.log(validLength);
 
   // ask for criteria
-  var numeric = window.confirm("Would you like numeric characters?");
-  var upperCase = window.confirm("Would you like uppercase characters?");
-  var lowerCase = window.confirm("Would you like lowercase characters?");
-  var special = window.confirm("Would you like special characters?");
+  var numeric = window.confirm("Would you like to include numeric characters?");
+  var upperCase = window.confirm("Would you like to include uppercase characters?");
+  var lowerCase = window.confirm("Would you like to include lowercase characters?");
+  var special = window.confirm("Would you like to include special characters?");
 
-  // generates random characters
+
+  // if numeric is true then add numbers to password
   if (numeric) {
-    results = results + generateNumber();
+    charactersIncluded = charactersIncluded + generateNumber;
   }
+  // if upperCase is true then add uppercase characters to password
   if (upperCase) {
-    results = results + generateUpperCase();
+    charactersIncluded = charactersIncluded + generateUpperCase;
   }
+  // if lowerCase is true then add lowercase characters to password
   if (lowerCase) {
-    results = results + generateLowerCase();
+    charactersIncluded = charactersIncluded + generateLowerCase;
   }
+  // if special is true add special characers to password
   if (special) {
-    results = results + generateSpecial();
+    charactersIncluded = charactersIncluded + generateSpecial;
   }
 
-  if (results === "") {
-    window.alert("No Criteria Selected");
+  // creates a loop to add one random character from the character list at a time until desired length
+  for (i = 0; i < validLength; i++) {
+    var charactersLength = charactersIncluded.length;
+    var characterGenerated = charactersIncluded.charAt(Math.floor(Math.random() * charactersLength));
+
+    // if no criteria selected break the loop 
+    if (charactersIncluded === "") {
+      window.alert("No Criteria Selected");
+      window.alert("Please select at least one criteria");
+      break;
+    }
+    // generates a random characters and adds it resulted password
+    else {
+      results = results + characterGenerated
+    }
   }
+
+  // displays alert of password created
+  window.alert("The password you created is: " + results)
+
+  // returns the complete password generated
   return results;
 
 }
@@ -59,55 +88,18 @@ var passwordLength = function () {
     }
   }
 
-  // console log to see value
-  console.log(askLength);
-
   // return value back to passwordLength
   return askLength;
 
 }
 
-// generates random number from 0-9
-function generateNumber() {
-  var numberGenerated = Math.floor(Math.random() * 10);
-  return numberGenerated;
-}
-
-// generates random uppercase characters
-function generateUpperCase() {
-  var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var charactersLength = characters.length;
-  var characterGenerated = characters.charAt(Math.floor(Math.random() * charactersLength));
-
-  return characterGenerated;
-
-}
-// generates random lowercase characters
-function generateLowerCase() {
-  var characters = "abcdefghijklmnopqrstuvwxyz";
-  var charactersLength = characters.length;
-  var characterGenerated = characters.charAt(Math.floor(Math.random() * charactersLength));
-
-  return characterGenerated;
-}
-// generates random special character
-function generateSpecial() {
-  var characters = "!@#$%^&*()[]{}";
-  var charactersLength = characters.length;
-  var characterGenerated = characters.charAt(Math.floor(Math.random() * charactersLength));
-
-  return characterGenerated;
-}
 // Write password to the #password input
 function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
 
   passwordText.value = password;
-
 }
-
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
-
